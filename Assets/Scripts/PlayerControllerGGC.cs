@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerGGC : MonoBehaviour
 {
     [SerializeField] float PlayerSpeed = 60f;
     [SerializeField] Rigidbody2D rigidbody2D;
