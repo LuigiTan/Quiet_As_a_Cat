@@ -1,68 +1,96 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyMovementDK : MonoBehaviour
 {
-    public GameObject home;
-    public GameObject player;
-    [SerializeField] float range;
-    public float speed;
-    private float distance;
-    private float distancePlayer;
-    Rigidbody2D rb;
-    Vector3 localScale;
-    float dirX;
+    private float anchor1Distance;
+    private float anchor2Distance;
+    [SerializeField] float anchorRange;
+    [SerializeField] Transform player;
+    [SerializeField] Transform anchor1;
+    [SerializeField] Transform anchor2;
+    NavMeshAgent agent;
 
-    void Start()
-    {
-        localScale = transform.localScale;
-        rb = GetComponent<Rigidbody2D>();
-    }
+    [SerializeField] private float FOV;
+    [SerializeField] private float viewDistance;
+    [SerializeField] private Transform prefabFOV;
+    private FieldOfView fov;
+
+    Vector3 aimDirection;
+    Vector3 localScale;
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, range);
+        Gizmos.DrawWireSphere(anchor1.position, anchorRange);
+        Gizmos.DrawWireSphere(anchor2.position, anchorRange);
+    }
+
+    void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+
+        fov = Instantiate(prefabFOV, null).GetComponent<FieldOfView>();
+        fov.SetFOV(FOV);
+        fov.SetViewDistance(viewDistance);
+        fov.SetAimDirection(aimDirection);
     }
 
     void Update()
     {
-        distance = Vector2.Distance(transform.position, home.transform.position);
-        distancePlayer = Vector2.Distance(player.transform.position, home.transform.position);
-        Vector2 directionPlayer = player.transform.position - transform.position;
-        directionPlayer.Normalize();
+        anchor1Distance = Vector2.Distance(transform.position, anchor1.position);
+        anchor2Distance = Vector2.Distance(transform.position, anchor2.position);
 
+        if (anchor2Distance <= anchorRange || anchor1Distance <= anchorRange)
+            MoveToAnchor();
 
-        if (distance < range && distancePlayer < range)
+        aimDirection = agent.velocity.normalized;
+        localScale = agent.velocity.normalized;
+        fov.SetOrigin(transform.position);
+        fov.SetAimDirection(aimDirection);
+        FindPlayer();
+    }
+
+    void MoveToAnchor()
+    {
+        StartCoroutine(Waiting());
+    }
+
+    IEnumerator Waiting()
+    {
+        Debug.Log("Enemy is waiting");
+        if (fov.CompareTag("Player"))
         {
-            Debug.Log("Moving towards Player");
-            transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
+            Debug.Log("Player Detected");
+            agent.Move(Vector3.zero);
         }
-        else
+        if (anchor2Distance <= anchorRange || transform.position == anchor2.position)
         {
-            Debug.Log("Moving to Home");
-            transform.position = Vector2.MoveTowards(this.transform.position, home.transform.position, speed * Time.deltaTime);
+            Debug.Log("Moving to anchor1");
+            yield return new WaitForSeconds(2f);
+            agent.SetDestination(anchor1.position);
+        }
+        if (anchor1Distance <= anchorRange || transform.position == anchor1.position)
+        {
+            Debug.Log("Moving to anchor2");
+            yield return new WaitForSeconds(2f);
+            agent.SetDestination(anchor2.position);
         }
     }
 
-    private void LateUpdate()
+    private void FindPlayer()
     {
-        CheckWhereToFace();
-    }
-
-    void CheckWhereToFace()
-    {
-        dirX = transform.position.x;
-
-        if ((dirX - player.transform.position.x < 0 && distancePlayer < range) || (distancePlayer > range && dirX < home.transform.position.x))
+        if (Vector3.Distance(this.transform.position, player.position) < viewDistance)
         {
-            localScale.x = 1;
+            Vector3 dirToPlayer = (player.position - this.transform.position).normalized;
+            if (Vector3.Angle(aimDirection, dirToPlayer) < FOV / 2f)
+            {
+                Debug.Log("Player Detected");
+            }
         }
-        else
-        {
-            localScale.x = -1;
-        }
-        transform.localScale = localScale;
     }
 }
