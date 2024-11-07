@@ -22,7 +22,7 @@ public class FieldOfView : MonoBehaviour
     private void LateUpdate()
     {
         int rayCount = 50;
-        float angle = 0f;
+        float angle = startingAngle;
         float angleIncrease = fov / rayCount;
 
         Vector3[] vertices = new Vector3[rayCount + 1 + 1];
@@ -74,7 +74,7 @@ public class FieldOfView : MonoBehaviour
 
     public void SetAimDirection(Vector3 aimDirection)
     {
-        startingAngle = UtilsClass.GetAngleFromVectorFloat(aimDirection) - fov / 2f;
+        startingAngle = UtilsClass.GetAngleFromVectorFloat(aimDirection) - fov / 20f;
     }
 
     public float SetFOV(float newFoV)
