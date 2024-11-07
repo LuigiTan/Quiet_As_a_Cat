@@ -18,6 +18,9 @@ public class EnemyMovementDK : MonoBehaviour
     [SerializeField] private Transform prefabFOV;
     private FieldOfView fov;
 
+    Vector3 aimDirection;
+    Vector3 localScale;
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -34,6 +37,7 @@ public class EnemyMovementDK : MonoBehaviour
         fov = Instantiate(prefabFOV, null).GetComponent<FieldOfView>();
         fov.SetFOV(FOV);
         fov.SetViewDistance(viewDistance);
+        fov.SetAimDirection(aimDirection);
     }
 
     void Update()
@@ -41,14 +45,14 @@ public class EnemyMovementDK : MonoBehaviour
         anchor1Distance = Vector2.Distance(transform.position, anchor1.position);
         anchor2Distance = Vector2.Distance(transform.position, anchor2.position);
 
-        FindPlayer();
-        if (anchor2Distance <= anchorRange)
-            MoveToAnchor();
-        else if (anchor1Distance <= anchorRange)
+        if (anchor2Distance <= anchorRange || anchor1Distance <= anchorRange)
             MoveToAnchor();
 
+        aimDirection = agent.velocity.normalized;
+        localScale = agent.velocity.normalized;
         fov.SetOrigin(transform.position);
-        fov.SetAimDirection(Vector3.forward);
+        fov.SetAimDirection(aimDirection);
+        FindPlayer();
     }
 
     void MoveToAnchor()
@@ -80,9 +84,13 @@ public class EnemyMovementDK : MonoBehaviour
 
     private void FindPlayer()
     {
-        if (Vector3.Distance(fov.transform.position, player.position) < viewDistance)
+        if (Vector3.Distance(this.transform.position, player.position) < viewDistance)
         {
-            Debug.Log("Player Detected");
+            Vector3 dirToPlayer = (player.position - this.transform.position).normalized;
+            if (Vector3.Angle(aimDirection, dirToPlayer) < FOV / 2f)
+            {
+                Debug.Log("Player Detected");
+            }
         }
     }
 }
