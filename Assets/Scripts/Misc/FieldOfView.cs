@@ -39,12 +39,12 @@ public class FieldOfView : MonoBehaviour
             RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, UtilsClass.GetVectorFromAngle(angle), viewDistance, layerMask);
             if (raycastHit2D.collider == null)
             {
-                Debug.Log("FOV hit nothing");
+                //Debug.Log("FOV hit nothing");
                 vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
             }
             else
             {
-                Debug.Log("FOV hit something");
+                //Debug.Log("FOV hit something");
                 vertex = raycastHit2D.point;
             }
             vertices[vertexIndex] = vertex;
