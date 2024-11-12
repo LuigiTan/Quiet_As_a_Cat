@@ -20,6 +20,7 @@ public class EnemyMovementDK : MonoBehaviour
 
     Vector3 aimDirection;
     Vector3 localScale;
+    private SpriteRenderer spriteRenderer;
 
     public static EnemyMovementDK instance;
 
@@ -45,6 +46,7 @@ public class EnemyMovementDK : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
@@ -52,7 +54,7 @@ public class EnemyMovementDK : MonoBehaviour
         fov.SetFOV(FOV);
         fov.SetViewDistance(viewDistance);
         fov.SetAimDirection(aimDirection);
-        localScale = transform.localScale;
+        //localScale = transform.localScale;
     }
 
     void Update()
@@ -67,7 +69,20 @@ public class EnemyMovementDK : MonoBehaviour
         fov.SetOrigin(transform.position);
         fov.SetAimDirection(aimDirection);
         //FindPlayer();
-        agent.isStopped = false;
+        //agent.speed = 0;
+        UpdateFlip();
+    }
+
+    void UpdateFlip()
+    {
+        if (agent.velocity.x < 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (agent.velocity.x > 0)
+        {
+            spriteRenderer.flipX = true;
+        }
     }
 
     void MoveToAnchor()
@@ -83,38 +98,16 @@ public class EnemyMovementDK : MonoBehaviour
             Debug.Log("Moving to anchor1");
             yield return new WaitForSeconds(2f);
             agent.SetDestination(anchor1.position);
-            localScale.x = -1;
-            transform.localScale = localScale;
+            //localScale.x = -1;
+            //transform.localScale = localScale;
         }
         if (anchor1Distance <= anchorRange || transform.position == anchor1.position)
         {
             Debug.Log("Moving to anchor2");
             yield return new WaitForSeconds(2f);
             agent.SetDestination(anchor2.position);
-            localScale.x = 1;
-            transform.localScale = localScale;
+            //localScale.x = 1;
+            //transform.localScale = localScale;
         }
     }
-
-    /*
-    public void FindPlayer()
-    {
-        if (Vector3.Distance(transform.position, player.position) < viewDistance)
-        {
-            Vector3 dirToPlayer =   (transform.position - player.position).normalized;
-            if (Vector3.Angle(aimDirection, dirToPlayer) < FOV / 2f)
-            {
-                RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, dirToPlayer, viewDistance);
-                if (raycastHit2D.collider != null)
-                {
-                    if (raycastHit2D.collider.CompareTag("Player"))
-                    {
-                        Debug.Log("Player Detected");
-                        agent.isStopped = true;
-                    }   
-                }
-                Debug.Log("Player in fov");
-            }
-        }
-    }*/
 }

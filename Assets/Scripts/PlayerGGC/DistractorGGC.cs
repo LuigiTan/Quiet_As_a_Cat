@@ -9,7 +9,8 @@ public class DistractorGGC : MonoBehaviour
     public float delayBeforeDestruction = 2f; // Tiempo en segundos antes de destruir el objeto después de detenerse
 
     private Rigidbody2D rb;
-    private bool hasActivated = false;
+    public bool hasActivated = false;
+    public Vector3 distractorPosition;
 
     void Start()
     {
@@ -24,10 +25,13 @@ public class DistractorGGC : MonoBehaviour
             hasActivated = true; // Marca que ya se activó para evitar múltiples activaciones
             ActivateNearbyEnemies();
             StartCoroutine(DestroyAfterDelay()); // Inicia la corrutina para destruir después de unos segundos
+            distractorPosition = GetComponent<DistractorGGC>().transform.position;
+            
+
         }
     }
 
-    void ActivateNearbyEnemies()
+    public void ActivateNearbyEnemies()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
 
@@ -39,6 +43,8 @@ public class DistractorGGC : MonoBehaviour
                 // Ejemplo de llamada al script del enemigo
                 // col.GetComponent<Enemy>().MoveTowards(transform.position);
                 Debug.Log("Enemigo detectado y activado"); // Confirmación de activación en el log
+                col.gameObject.SetActive(false);
+                col.GetComponentInChildren<EnemyMovementDK>().enabled = false;
             }
         }
     }

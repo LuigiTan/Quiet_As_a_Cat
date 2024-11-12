@@ -12,8 +12,10 @@ public class FieldOfView : MonoBehaviour
     private Vector3 origin;
     private float startingAngle;
 
-    private float gameOverTimer = 1.5f;
-    private float gameOverCounter = 0f;
+    private float gameOverTimer = 2f;
+    public float gameOverCounter = 0f;
+
+    public bool playerDetected = false;
 
     private void Start()
     {
@@ -44,6 +46,8 @@ public class FieldOfView : MonoBehaviour
 
         int vertexIndex = 1;
         int triangleIndex = 0;
+
+        bool _playerDetected = false;
         for (int i = 0; i <= rayCount; i++)
         {
             Vector3 vertex;
@@ -52,7 +56,6 @@ public class FieldOfView : MonoBehaviour
             {
                 //Debug.Log("FOV hit nothing");
                 vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
-                gameOverCounter = 0;
             }
             else
             {
@@ -60,15 +63,8 @@ public class FieldOfView : MonoBehaviour
                 if (raycastHit2D.collider.CompareTag("Player"))
                 {
                     vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
-                    Debug.Log("Enemy detected Player, " + gameOverCounter);
-                    gameOverCounter += TimeIncrement();
-                    if (gameOverCounter > gameOverTimer)
-                    {
-                        // Here enemy detects player
-                        Debug.Log("Player dies");
-                        Destroy(EnemyMovementDK.instance.player);
-                        gameOverCounter = 0;
-                    }
+                    Debug.Log("Enemy detected Player");
+                    _playerDetected = true;
                 }
                 else
                 {
@@ -88,11 +84,13 @@ public class FieldOfView : MonoBehaviour
             vertexIndex++;
             angle -= angleIncrease;
         }
+        playerDetected = _playerDetected;
 
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
         mesh.RecalculateBounds();
+        PlayerDetected();
     }
 
     public void SetOrigin(Vector3 origin)
@@ -119,9 +117,28 @@ public class FieldOfView : MonoBehaviour
     {
         if (EnemyMovementDK.instance.player != null)
         {
-            float distance = Vector3.Distance(transform.position, EnemyMovementDK.instance.player.transform.position);
-            if (distance < viewDistance) return Time.deltaTime;
+            return 1f;
         }
-        return 0;
+        return 0f;
+    }
+
+    void PlayerDetected()
+    {
+        if (playerDetected)
+        {
+            gameOverCounter += TimeIncrement() * Time.deltaTime;
+            if (gameOverCounter > gameOverTimer)
+            {
+                // Here enemy detects player
+                Debug.Log("Player dies");
+                Destroy(EnemyMovementDK.instance.player);
+                PlayerDetectionDK.instance.GameOver();
+                gameOverCounter = 0;
+            }
+        }
+        else
+        {
+            gameOverCounter = 0;
+        }
     }
 }
