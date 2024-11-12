@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 8199271535622846669}
   - component: {fileID: 941180238185672721}
   - component: {fileID: 1876241016676204511}
-  - component: {fileID: 6957058193535231913}
   - component: {fileID: 8378726248249856049}
   - component: {fileID: 7088537595188733615}
-  m_Layer: 0
+  - component: {fileID: 5530117969544500391}
+  m_Layer: 3
   m_Name: PlayerPrototypeGGC
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,12 +78,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 99
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: -1375532889, guid: 560619ac3b22a034c9990c034e8209dd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.84375, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -130,7 +130,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &6957058193535231913
+--- !u!114 &8378726248249856049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6540970890931144817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48276fb1a357796429059af7ddaef316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distractorPrefab: {fileID: 2394857039759120460, guid: 330a9247dd48be04eafec4451602028a, type: 3}
+  throwForce: 10
+  spawnOffset: 1.5
+  throwCooldown: 5
+  maxDistractors: 5
+--- !u!114 &7088537595188733615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6540970890931144817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0dd79ae108ad44bb203495458b5d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxIncapacitateUses: 3
+--- !u!61 &5530117969544500391
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,42 +196,12 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
-    newSize: {x: 1, y: 2}
+    oldSize: {x: 1.6875, y: 2}
+    newSize: {x: 0.84375, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1.6875, y: 2}
   m_EdgeRadius: 0
---- !u!114 &8378726248249856049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6540970890931144817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48276fb1a357796429059af7ddaef316, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distractorPrefab: {fileID: 2394857039759120460, guid: 330a9247dd48be04eafec4451602028a, type: 3}
-  throwForce: 10
-  spawnOffset: 1.5
-  throwCooldown: 5
-  maxDistractors: 5
---- !u!114 &7088537595188733615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6540970890931144817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de0dd79ae108ad44bb203495458b5d67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxIncapacitateUses: 3
