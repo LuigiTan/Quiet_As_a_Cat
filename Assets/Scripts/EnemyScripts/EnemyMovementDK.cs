@@ -5,10 +5,10 @@ using UnityEngine.AI;
 
 public class EnemyMovementDK : MonoBehaviour
 {
-    private float anchor1Distance;
+    public float anchor1Distance;
     private float anchor2Distance;
-    [SerializeField] float anchorRange;
-    [SerializeField] Transform player;
+    [SerializeField] public float anchorRange;
+    [SerializeField] public GameObject player;
     [SerializeField] Transform anchor1;
     [SerializeField] Transform anchor2;
     NavMeshAgent agent;
@@ -20,6 +20,20 @@ public class EnemyMovementDK : MonoBehaviour
 
     Vector3 aimDirection;
     Vector3 localScale;
+
+    public static EnemyMovementDK instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -38,6 +52,7 @@ public class EnemyMovementDK : MonoBehaviour
         fov.SetFOV(FOV);
         fov.SetViewDistance(viewDistance);
         fov.SetAimDirection(aimDirection);
+        localScale = transform.localScale;
     }
 
     void Update()
@@ -49,10 +64,10 @@ public class EnemyMovementDK : MonoBehaviour
             MoveToAnchor();
 
         aimDirection = agent.velocity.normalized;
-        localScale = agent.velocity.normalized;
         fov.SetOrigin(transform.position);
         fov.SetAimDirection(aimDirection);
-        FindPlayer();
+        //FindPlayer();
+        agent.isStopped = false;
     }
 
     void MoveToAnchor()
@@ -63,34 +78,43 @@ public class EnemyMovementDK : MonoBehaviour
     IEnumerator Waiting()
     {
         Debug.Log("Enemy is waiting");
-        if (fov.CompareTag("Player"))
-        {
-            Debug.Log("Player Detected");
-            agent.Move(Vector3.zero);
-        }
         if (anchor2Distance <= anchorRange || transform.position == anchor2.position)
         {
             Debug.Log("Moving to anchor1");
             yield return new WaitForSeconds(2f);
             agent.SetDestination(anchor1.position);
+            localScale.x = -1;
+            transform.localScale = localScale;
         }
         if (anchor1Distance <= anchorRange || transform.position == anchor1.position)
         {
             Debug.Log("Moving to anchor2");
             yield return new WaitForSeconds(2f);
             agent.SetDestination(anchor2.position);
+            localScale.x = 1;
+            transform.localScale = localScale;
         }
     }
 
-    private void FindPlayer()
+    /*
+    public void FindPlayer()
     {
-        if (Vector3.Distance(this.transform.position, player.position) < viewDistance)
+        if (Vector3.Distance(transform.position, player.position) < viewDistance)
         {
-            Vector3 dirToPlayer = (player.position - this.transform.position).normalized;
+            Vector3 dirToPlayer =   (transform.position - player.position).normalized;
             if (Vector3.Angle(aimDirection, dirToPlayer) < FOV / 2f)
             {
-                Debug.Log("Player Detected");
+                RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, dirToPlayer, viewDistance);
+                if (raycastHit2D.collider != null)
+                {
+                    if (raycastHit2D.collider.CompareTag("Player"))
+                    {
+                        Debug.Log("Player Detected");
+                        agent.isStopped = true;
+                    }   
+                }
+                Debug.Log("Player in fov");
             }
         }
-    }
+    }*/
 }

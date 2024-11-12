@@ -12,6 +12,9 @@ public class FieldOfView : MonoBehaviour
     private Vector3 origin;
     private float startingAngle;
 
+    private float gameOverTimer = 5f;
+    private float gameOverCounter = 0f;
+
     private void Start()
     {
         mesh = new Mesh();
@@ -22,7 +25,15 @@ public class FieldOfView : MonoBehaviour
     private void LateUpdate()
     {
         int rayCount = 50;
-        float angle = startingAngle;
+        float angle;
+        if (EnemyMovementDK.instance.anchor1Distance <= EnemyMovementDK.instance.anchorRange)
+        {
+            angle = (180 + (fov * 0.5f));
+        }
+        else
+        {
+            angle = startingAngle + (fov * 0.5f);
+        }
         float angleIncrease = fov / rayCount;
 
         Vector3[] vertices = new Vector3[rayCount + 1 + 1];
@@ -41,11 +52,28 @@ public class FieldOfView : MonoBehaviour
             {
                 //Debug.Log("FOV hit nothing");
                 vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
+                gameOverCounter = 0;
             }
             else
             {
-                //Debug.Log("FOV hit something");
-                vertex = raycastHit2D.point;
+                //Debug.Log("FOV hit something
+                if (raycastHit2D.collider.CompareTag("Player"))
+                {
+                    vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
+                    Debug.Log("Enemy detected Player, " + gameOverCounter);
+                    gameOverCounter += TimeIncrement();
+                    if (gameOverCounter > gameOverTimer)
+                    {
+                        // Here enemy detects player
+                        Debug.Log("Player dies");
+                        Destroy(EnemyMovementDK.instance.player);
+                        gameOverCounter = 0;
+                    }
+                }
+                else
+                {
+                    vertex = raycastHit2D.point;
+                }
             }
             vertices[vertexIndex] = vertex;
 
@@ -85,5 +113,15 @@ public class FieldOfView : MonoBehaviour
     public float SetViewDistance(float newVD)
     {
         return viewDistance = newVD;
+    }
+
+    float TimeIncrement()
+    {
+        if (EnemyMovementDK.instance.player != null)
+        {
+            float distance = Vector3.Distance(transform.position, EnemyMovementDK.instance.player.transform.position);
+            if (distance < viewDistance) return Time.deltaTime;
+        }
+        return 0;
     }
 }
