@@ -12,7 +12,7 @@ public class FieldOfView : MonoBehaviour
     private Vector3 origin;
     private float startingAngle;
 
-    private float gameOverTimer = 5f;
+    private float gameOverTimer = 1.5f;
     private float gameOverCounter = 0f;
 
     private void Start()
