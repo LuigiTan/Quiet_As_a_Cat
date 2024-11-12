@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class PlayerDetectionDK : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    [SerializeField] private GameObject gameOverPanel;
+    public static PlayerDetectionDK instance;
+
+    private void Awake()
     {
-        if (collision.collider.CompareTag("Player"))
+        if (instance == null)
         {
-            Debug.Log("Enemy Detected Player");
-            StartCoroutine(GameOver());
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
         }
     }
 
-    IEnumerator GameOver()
+    public void GameOver()
     {
-        yield return new WaitForSeconds(5f);
-        Debug.Log("Game Over");
+        gameOverPanel.SetActive(true);
     }
 }
