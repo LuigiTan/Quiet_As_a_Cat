@@ -12,23 +12,36 @@ public class FieldOfView : MonoBehaviour
     private Vector3 origin;
     private float startingAngle;
 
-    private float gameOverTimer = 2f;
+    private float gameOverTimer = 1f;
     public float gameOverCounter = 0f;
 
     public bool playerDetected = false;
+    [SerializeField] private EnemyMovementDK enemyMovement;
+    [SerializeField] private GameObject player;
+    [SerializeField] private PlayerDetectionDK playerDetection;
 
     private void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         origin = Vector3.zero;
+        if (enemyMovement == null)
+            enemyMovement = GetComponentInParent<EnemyMovementDK>();
+
+        if (playerDetection == null)
+            playerDetection = FindObjectOfType<PlayerDetectionDK>();
+
+        if (player == null && enemyMovement != null)
+            player = enemyMovement.player;
     }
 
     private void LateUpdate()
     {
+        if (enemyMovement == null) return;
+
         int rayCount = 50;
         float angle;
-        if (EnemyMovementDK.instance.anchor1Distance <= EnemyMovementDK.instance.anchorRange)
+        if (enemyMovement != null && enemyMovement.anchor1Distance <= enemyMovement.anchorRange)
         {
             angle = (180 + (fov * 0.5f));
         }
@@ -115,7 +128,7 @@ public class FieldOfView : MonoBehaviour
 
     float TimeIncrement()
     {
-        if (EnemyMovementDK.instance.player != null)
+        if (player != null)
         {
             return 1f;
         }
@@ -129,10 +142,10 @@ public class FieldOfView : MonoBehaviour
             gameOverCounter += TimeIncrement() * Time.deltaTime;
             if (gameOverCounter > gameOverTimer)
             {
-                // Here enemy detects player
-                Debug.Log("Player dies");
-                Destroy(EnemyMovementDK.instance.player);
-                PlayerDetectionDK.instance.GameOver();
+                if (playerDetection != null)
+                {
+                    playerDetection.GameOver();
+                }
                 gameOverCounter = 0;
             }
         }

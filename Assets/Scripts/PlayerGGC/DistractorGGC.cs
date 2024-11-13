@@ -44,7 +44,15 @@ public class DistractorGGC : MonoBehaviour
                 // col.GetComponent<Enemy>().MoveTowards(transform.position);
                 Debug.Log("Enemigo detectado y activado"); // Confirmación de activación en el log
                 col.gameObject.SetActive(false);
-                col.GetComponentInChildren<EnemyMovementDK>().enabled = false;
+                EnemyMovementDK enemyMovement = col.GetComponent<EnemyMovementDK>();
+                if (enemyMovement != null)
+                {
+                    enemyMovement.fieldOfView.transform.gameObject.SetActive(false);
+                }
+                else
+                {
+                    Debug.LogError("EnemyMovementDK component not found on " + col.name);
+                }
             }
         }
     }

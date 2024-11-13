@@ -12,10 +12,13 @@ public class DistractionThrowGGC : MonoBehaviour
     [Header("Cooldown")]
     public float throwCooldown = 5f; // Tiempo de espera entre lanzamientos
     public bool canThrow = true; // Controla si el jugador puede lanzar
+    private bool animationMid = false;
 
     [Header("Distractor Limit")]
     public int maxDistractors = 5; // Número máximo de distractores que el jugador puede lanzar
     private int remainingDistractors; // Número de distractores restantes
+
+    public Animator animator;
 
     public static DistractionThrowGGC instance;
 
@@ -35,6 +38,7 @@ public class DistractionThrowGGC : MonoBehaviour
     {
         // Inicializa el contador de distractores restantes con el valor máximo
         remainingDistractors = maxDistractors;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -55,6 +59,16 @@ public class DistractionThrowGGC : MonoBehaviour
         {
             Debug.Log("Distraccion en Cooldown");
         }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Throw") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1f)
+        {
+            animator.SetBool("isWalkingUp", false);
+            animator.SetBool("isWalkingDown", false);
+            animator.SetBool("isWalkingToSide", false);
+            animator.SetBool("Idle", true);
+            animator.SetBool("Dead", false);
+            animator.SetBool("isThrowing", false);
+            animator.SetBool("isIncapacitating", false);
+        }
     }
 
     void ThrowDistractor()
@@ -70,13 +84,22 @@ public class DistractionThrowGGC : MonoBehaviour
         Vector3 spawnPosition = transform.position + (Vector3)(direction * spawnOffset);
 
         // Instancia el objeto y aplica la fuerza en el plano 2D
-        GameObject distractorInstance = Instantiate(distractorPrefab, spawnPosition, Quaternion.identity);
-        Rigidbody2D rb = distractorInstance.GetComponent<Rigidbody2D>();
-        rb.AddForce(direction * throwForce, ForceMode2D.Impulse);
+        animator.SetBool("isWalkingUp", false);
+        animator.SetBool("isWalkingDown", false);
+        animator.SetBool("isWalkingToSide", false);
+        animator.SetBool("Idle", false);
+        animator.SetBool("Dead", false);
+        animator.SetBool("isThrowing", true);
+        animator.SetBool("IsIncapacitating", false);
+        //if (animator.GetCurrentAnimatorStateInfo(0).IsName("Throw") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .5f)
+            GameObject distractorInstance = Instantiate(distractorPrefab, spawnPosition, Quaternion.identity);
+            Rigidbody2D rb = distractorInstance.GetComponent<Rigidbody2D>();
+            rb.AddForce(direction * throwForce, ForceMode2D.Impulse);
 
         // Reduce el contador de distractores restantes y muestra el mensaje en consola
         remainingDistractors--;
         Debug.Log("Quedan " + remainingDistractors + " distracciones");
+        animationMid = false;
     }
     IEnumerator ThrowCooldownCoroutine()
     {

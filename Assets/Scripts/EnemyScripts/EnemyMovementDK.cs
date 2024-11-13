@@ -16,25 +16,25 @@ public class EnemyMovementDK : MonoBehaviour
     [SerializeField] private float FOV;
     [SerializeField] private float viewDistance;
     [SerializeField] private Transform prefabFOV;
-    private FieldOfView fov;
+    [SerializeField] public FieldOfView fieldOfView;
 
     Vector3 aimDirection;
     Vector3 localScale;
     private SpriteRenderer spriteRenderer;
 
-    public static EnemyMovementDK instance;
+    //public static EnemyMovementDK instance;
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //    }
+    //    else
+    //    {
+    //        Destroy(this);
+    //    }
+    //}
 
     private void OnDrawGizmosSelected()
     {
@@ -50,10 +50,10 @@ public class EnemyMovementDK : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
-        fov = Instantiate(prefabFOV, null).GetComponent<FieldOfView>();
-        fov.SetFOV(FOV);
-        fov.SetViewDistance(viewDistance);
-        fov.SetAimDirection(aimDirection);
+        fieldOfView = Instantiate(fieldOfView, null).GetComponent<FieldOfView>();
+        fieldOfView.SetFOV(FOV);
+        fieldOfView.SetViewDistance(viewDistance);
+        fieldOfView.SetAimDirection(aimDirection);
         //localScale = transform.localScale;
     }
 
@@ -66,8 +66,8 @@ public class EnemyMovementDK : MonoBehaviour
             MoveToAnchor();
 
         aimDirection = agent.velocity.normalized;
-        fov.SetOrigin(transform.position);
-        fov.SetAimDirection(aimDirection);
+        fieldOfView.SetOrigin(transform.position);
+        fieldOfView.SetAimDirection(aimDirection);
         //FindPlayer();
         //agent.speed = 0;
         UpdateFlip();
@@ -77,11 +77,15 @@ public class EnemyMovementDK : MonoBehaviour
     {
         if (agent.velocity.x < 0)
         {
-            spriteRenderer.flipX = false;
+            // Flip the sprite to the left
+            //spriteRenderer.flipX = false;
+            transform.localScale = new Vector3(1, 1, 1); // Reset scale to default
         }
         else if (agent.velocity.x > 0)
         {
-            spriteRenderer.flipX = true;
+            // Flip the sprite to the right
+            //spriteRenderer.flipX = true;
+            transform.localScale = new Vector3(-1, 1, 1); // Mirror along the X-axis
         }
     }
 

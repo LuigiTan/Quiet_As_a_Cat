@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: 8378726248249856049}
   - component: {fileID: 7088537595188733615}
   - component: {fileID: 5530117969544500391}
+  - component: {fileID: 5128397574919554432}
+  - component: {fileID: 111066838430844871}
+  - component: {fileID: 6925738180499407272}
   m_Layer: 3
   m_Name: PlayerPrototypeGGC
   m_TagString: Player
@@ -102,7 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 10
-  rigidbody2D: {fileID: 0}
+  rigidbody2D: {fileID: 1876241016676204511}
+  animator: {fileID: 5128397574919554432}
+  isMoving: 0
 --- !u!50 &1876241016676204511
 Rigidbody2D:
   serializedVersion: 4
@@ -146,7 +151,9 @@ MonoBehaviour:
   throwForce: 10
   spawnOffset: 1.5
   throwCooldown: 5
+  canThrow: 1
   maxDistractors: 5
+  animator: {fileID: 5128397574919554432}
 --- !u!114 &7088537595188733615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,6 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxIncapacitateUses: 3
+  animator: {fileID: 5128397574919554432}
+  enemyAnimator: {fileID: 0}
 --- !u!61 &5530117969544500391
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -205,3 +214,53 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.6875, y: 2}
   m_EdgeRadius: 0
+--- !u!95 &5128397574919554432
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6540970890931144817}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 87ad6a8e8b765ed48b85ffd8ded03b5d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &111066838430844871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6540970890931144817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2bb81f28aa522743acaba511e3624c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 0}
+  isPaused: 0
+--- !u!114 &6925738180499407272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6540970890931144817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f13c7e45c7d53664c8fe4017927cfa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverPanel: {fileID: 0}
+  animator: {fileID: 5128397574919554432}
+  player: {fileID: 6540970890931144817}
