@@ -50,12 +50,14 @@ public class PauseMenuDK : MonoBehaviour
         //Cursor.lockState = CursorLockMode.None;
         //Cursor.visible = true; Why tho
         isPaused = true;
+        DistractionThrowGGC.instance.canThrow = false;
     }
 
     public void Resume()
     {
         Time.timeScale = 1.0f;
         isPaused = false;
+        DistractionThrowGGC.instance.canThrow = true;
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         pauseMenu.SetActive(false);

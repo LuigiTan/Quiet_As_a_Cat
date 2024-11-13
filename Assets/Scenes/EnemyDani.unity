@@ -590,6 +590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1831227462}
+  isPaused: 0
 --- !u!1 &1498130408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,6 +1170,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1682040211382145495, guid: c93abb28499c5604bad6e064a1c29f75, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1436990945}
     - target: {fileID: 5976970417604867428, guid: c93abb28499c5604bad6e064a1c29f75, type: 3}
       propertyPath: m_Name
       value: Screens
