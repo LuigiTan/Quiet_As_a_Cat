@@ -6,9 +6,21 @@ using UnityEngine.UI;
 public class PauseMenuDK : MonoBehaviour
 {
     public GameObject pauseMenu;
-    bool isPaused = false;
+    public bool isPaused = false;
+    public static PauseMenuDK instance;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
     void Start()
     {
         pauseMenu.SetActive(false);
@@ -35,8 +47,8 @@ public class PauseMenuDK : MonoBehaviour
     {
         pauseMenu.SetActive(true);
         Time.timeScale = 0.0f;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.None;
+        //Cursor.visible = true; Why tho
         isPaused = true;
     }
 
@@ -44,8 +56,8 @@ public class PauseMenuDK : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         isPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         pauseMenu.SetActive(false);
     }
 }
