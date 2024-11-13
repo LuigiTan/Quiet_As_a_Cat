@@ -18,6 +18,11 @@ public class SceneChangeDK : MonoBehaviour
     public void Home(string home)
     {
         SceneManager.LoadScene(home);
+        Time.timeScale = 1.0f;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = true;
+        PauseMenuDK.instance.isPaused = false;
+        PauseMenuDK.instance.pauseMenu.SetActive(false);
     }
 
     public void Play(string gameMain)
