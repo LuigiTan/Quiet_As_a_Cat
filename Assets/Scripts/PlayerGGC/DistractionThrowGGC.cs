@@ -11,11 +11,25 @@ public class DistractionThrowGGC : MonoBehaviour
 
     [Header("Cooldown")]
     public float throwCooldown = 5f; // Tiempo de espera entre lanzamientos
-    private bool canThrow = true; // Controla si el jugador puede lanzar
+    public bool canThrow = true; // Controla si el jugador puede lanzar
 
     [Header("Distractor Limit")]
     public int maxDistractors = 5; // Número máximo de distractores que el jugador puede lanzar
     private int remainingDistractors; // Número de distractores restantes
+
+    public static DistractionThrowGGC instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     void Start()
     {
