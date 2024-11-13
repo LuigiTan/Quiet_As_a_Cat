@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyInteractionGGC : MonoBehaviour
 {
     public int maxIncapacitateUses = 3; // Número máximo de veces que se puede incapacitar a enemigos
+    public Animator animator;
     private int remainingUses; // Contador de usos restantes
 
     private Collider2D enemyColliderInRange; // Referencia al collider del enemigo con el que se puede interactuar
@@ -13,6 +15,7 @@ public class EnemyInteractionGGC : MonoBehaviour
     {
         // Inicializa los usos restantes al valor máximo
         remainingUses = maxIncapacitateUses;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -38,12 +41,41 @@ public class EnemyInteractionGGC : MonoBehaviour
                 Debug.Log("Fuera de rango para incapacitar");
             }
         }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Incapacitate") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1f)
+        {
+            animator.SetBool("isWalkingUp", false);
+            animator.SetBool("isWalkingDown", false);
+            animator.SetBool("isWalkingToSide", false);
+            animator.SetBool("Idle", true);
+            animator.SetBool("Dead", false);
+            animator.SetBool("isThrowing", false);
+            animator.SetBool("IsIncapacitating", false);
+        }
+
     }
 
     void IncapacitateEnemy()
     {
         // Desactiva el objeto del enemigo
+        animator.SetBool("isWalkingUp", false);
+        animator.SetBool("isWalkingDown", false);
+        animator.SetBool("isWalkingToSide", false);
+        animator.SetBool("Idle", false);
+        animator.SetBool("Dead", false);
+        animator.SetBool("isThrowing", false);
+        animator.SetBool("IsIncapacitating", true);
+
+        EnemyMovementDK enemyMovement = enemyColliderInRange.GetComponentInParent<EnemyMovementDK>();
+        if (enemyMovement != null)
+        {
+            enemyMovement.fieldOfView.transform.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("EnemyMovementDK component not found on " + enemyColliderInRange.name);
+        }
         enemyColliderInRange.transform.parent.gameObject.SetActive(false);
+
 
         // Aquí irían las instrucciones futuras para animar y desactivar componentes del enemigo
         // Ejemplo:

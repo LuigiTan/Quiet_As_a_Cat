@@ -7,20 +7,7 @@ public class PauseMenuDK : MonoBehaviour
 {
     public GameObject pauseMenu;
     public bool isPaused = false;
-    public static PauseMenuDK instance;
 
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
     void Start()
     {
         pauseMenu.SetActive(false);
