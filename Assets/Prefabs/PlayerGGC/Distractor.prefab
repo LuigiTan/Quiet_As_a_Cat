@@ -164,3 +164,5 @@ MonoBehaviour:
   stopThreshold: 0.1
   detectionRadius: 5
   delayBeforeDestruction: 2
+  hasActivated: 0
+  distractorPosition: {x: 0, y: 0, z: 0}
