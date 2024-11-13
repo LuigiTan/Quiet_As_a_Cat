@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeDK : MonoBehaviour
 {
+    [SerializeField] private PauseMenuDK pauseMenu;
+
     public void Quit()
     {
         Application.Quit();
@@ -20,8 +22,8 @@ public class SceneChangeDK : MonoBehaviour
         Time.timeScale = 1.0f;
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = true;
-        PauseMenuDK.instance.isPaused = false;
-        PauseMenuDK.instance.pauseMenu.SetActive(false);
+        pauseMenu.isPaused = false;
+        pauseMenu.enabled = false;
         SceneManager.LoadScene(home);
     }
 

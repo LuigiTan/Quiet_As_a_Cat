@@ -99,4 +99,5 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  player: {fileID: 0}
+  gameOverCounter: 0
+  playerDetected: 0
