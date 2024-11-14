@@ -75,7 +75,8 @@ public class FieldOfView : MonoBehaviour
                 //Debug.Log("FOV hit something
                 if (raycastHit2D.collider.CompareTag("Player"))
                 {
-                    vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
+                    vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;//Esto se puede quitar para que el jugador tape el FOV y arrelgar el problema que tiene de que deja que el FOV 
+                                                                                            //continue a donde no deberia
                     Debug.Log("Enemy detected Player");
                     _playerDetected = true;
                 }
